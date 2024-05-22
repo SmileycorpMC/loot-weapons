@@ -11,15 +11,15 @@ import net.smileycorp.lootweapons.common.attributes.ElementalWeaponAttributes;
 
 public class LootData {
     
-    private static final LootData EMPTY = new LootData(null, new int[0], new int[0], new float[0], null);
+    private static final LootData EMPTY = new LootData(null, new byte[0], new int[0], new float[0], null);
     private final Rarity rarity;
-    private final int[] parts;
+    private final byte[] parts;
     private final int[] colours;
     private final float[] stats;
     
     private final ElementalWeaponAttribute attribute;
     
-    private LootData(Rarity rarity, int[] parts, int[] colours, float[] stats, ElementalWeaponAttribute attribute) {
+    private LootData(Rarity rarity, byte[] parts, int[] colours, float[] stats, ElementalWeaponAttribute attribute) {
         this.rarity = rarity;
         this.parts = parts;
         this.colours = colours;
@@ -31,7 +31,7 @@ public class LootData {
         return rarity == null ? Rarity.COMMON : rarity;
     }
     
-    public int[] getParts() {
+    public byte[] getParts() {
         return parts;
     }
     
@@ -50,7 +50,7 @@ public class LootData {
     public CompoundTag toTag() {
         CompoundTag tag = new CompoundTag();
         if (rarity != null) tag.putString("rarity", rarity.toString());
-        if (parts.length > 0) tag.putIntArray("parts", parts);
+        if (parts.length > 0) tag.putByteArray("parts", parts);
         if (colours.length > 0) tag.putIntArray("colours", colours);
         if (stats.length > 0) {
             ListTag list = new ListTag();
@@ -67,7 +67,7 @@ public class LootData {
     public static LootData fromTag(CompoundTag tag) {
         if (tag == null) return LootData.EMPTY;
         Builder builder = new Builder(tag.contains("rarity") ? Rarity.valueOf(tag.getString("rarity")) : Rarity.COMMON);
-        if (tag.contains("parts")) builder.parts(tag.getIntArray("parts"));
+        if (tag.contains("parts")) builder.parts(tag.getByteArray("parts"));
         if (tag.contains("colours")) builder.colours(tag.getIntArray("colours"));
         if (tag.contains("stats")) {
             ListTag list = tag.getList("stats", Tag.TAG_FLOAT);
@@ -82,7 +82,7 @@ public class LootData {
     public static class Builder {
     
         private final Rarity rarity;
-        private int[] parts = new int[0];
+        private byte[] parts = new byte[0];
         private int[] colours = new int[0];
         private float[] stats = new float[0];
     
@@ -92,7 +92,7 @@ public class LootData {
             this.rarity = rarity;
         }
     
-        public Builder parts(int... parts) {
+        public Builder parts(byte... parts) {
             this.parts = parts;
             return this;
         }

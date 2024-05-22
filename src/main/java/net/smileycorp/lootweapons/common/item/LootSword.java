@@ -20,7 +20,7 @@ public class LootSword extends SwordItem implements LootItem {
         ItemStack stack = new ItemStack(this);
         LootData.Builder data = new LootData.Builder(rarity);
         data.colours(getRandomMaterialColour(rarityValue));
-        data.parts(0, 0 ,0);
+        data.parts((byte) 0, (byte) 0 , (byte) 0);
         data.stats(1f, 1f);
         if (shouldHaveElementalAttribute(luck, rarityValue)) data.attribute(ElementalWeaponAttributes.getRandomAttribute(rand));
         stack.setTag(data.build().toTag());
