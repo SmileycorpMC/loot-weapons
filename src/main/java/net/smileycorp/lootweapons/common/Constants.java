@@ -1,8 +1,12 @@
 package net.smileycorp.lootweapons.common;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Rarity;
 
 public class Constants {
+	
+	public static final Rarity LEGENDARY = Rarity.create("legendary", style -> style.withColor(0xFFC300).withBold(true));
+	public static final Rarity MYTHICAL = Rarity.create("mythic", style -> style.withColor(0xFF9300).withBold(true));
 
 	public static final String MODID = "lootweapons";
 	public static final String NAME = "Loot Weapons";

@@ -2,6 +2,7 @@ package net.smileycorp.lootweapons.common.attributes;
 
 import com.google.common.collect.Maps;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.smileycorp.lootweapons.common.Constants;
 
 import java.util.Map;
@@ -24,10 +25,16 @@ public class ElementalWeaponAttributes {
         return ATTRIBUTE_MAP.get(name);
     }
     
-    public static ResourceLocation getName(ElementalWeaponAttribute attribute) {
+    static ResourceLocation getName(ElementalWeaponAttribute attribute) {
         for (Map.Entry<ResourceLocation, ElementalWeaponAttribute> entry : ATTRIBUTE_MAP.entrySet())
             if (entry.getValue() == attribute) return entry.getKey();
         return null;
+    }
+    
+    public static ElementalWeaponAttribute getRandomAttribute(RandomSource rand) {
+        if (ATTRIBUTE_MAP.isEmpty()) return null;
+        ElementalWeaponAttribute[] attributes = ATTRIBUTE_MAP.values().toArray(new ElementalWeaponAttribute[ATTRIBUTE_MAP.size()]);
+        return attributes[rand.nextInt(attributes.length)];
     }
     
 }

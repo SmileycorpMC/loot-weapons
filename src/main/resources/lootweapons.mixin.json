@@ -3,15 +3,11 @@
 	"package": "net.smileycorp.lootweapons.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"refmap": "elites.refmap.json",
-    "client": [
-		"MixinLivingEntityRenderer"
-	],
+    "client": [],
     "server": [],
 	"mixins": [
-		"MixinEntity",
-      	"MixinMobEffectInstance",
-		"MixinSlime",
-		"MixinTameableAnimal"
+		"MixinDamageSources",
+		"MixinRarity"
     ],
 	"minVersion": "0.8"
 }

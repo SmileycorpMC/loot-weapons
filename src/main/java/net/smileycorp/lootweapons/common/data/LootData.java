@@ -9,10 +9,9 @@ import net.minecraft.world.item.Rarity;
 import net.smileycorp.lootweapons.common.attributes.ElementalWeaponAttribute;
 import net.smileycorp.lootweapons.common.attributes.ElementalWeaponAttributes;
 
-import java.util.stream.Collectors;
-
 public class LootData {
     
+    private static final LootData EMPTY = new LootData(null, new int[0], new int[0], new float[0], null);
     private final Rarity rarity;
     private final int[] parts;
     private final int[] colours;
@@ -29,7 +28,7 @@ public class LootData {
     }
     
     public Rarity getRarity() {
-        return rarity;
+        return rarity == null ? Rarity.COMMON : rarity;
     }
     
     public int[] getParts() {
@@ -59,14 +58,14 @@ public class LootData {
             tag.put("stats", list);
         }
         if (attribute != null) {
-            ResourceLocation name = ElementalWeaponAttributes.getName(attribute);
+            ResourceLocation name = attribute.getRegistryName();
             if (name != null) tag.putString("attribute", name.toString());
         }
         return tag;
     }
     
     public static LootData fromTag(CompoundTag tag) {
-        if (tag == null) return null;
+        if (tag == null) return LootData.EMPTY;
         Builder builder = new Builder(tag.contains("rarity") ? Rarity.valueOf(tag.getString("rarity")) : Rarity.COMMON);
         if (tag.contains("parts")) builder.parts(tag.getIntArray("parts"));
         if (tag.contains("colours")) builder.colours(tag.getIntArray("colours"));
@@ -93,17 +92,17 @@ public class LootData {
             this.rarity = rarity;
         }
     
-        public Builder parts(int[] parts) {
+        public Builder parts(int... parts) {
             this.parts = parts;
             return this;
         }
         
-        public Builder colours(int[] colours) {
+        public Builder colours(int... colours) {
             this.colours = colours;
             return this;
         }
     
-        public Builder stats(float[] stats) {
+        public Builder stats(float... stats) {
             this.stats = stats;
             return this;
         }
