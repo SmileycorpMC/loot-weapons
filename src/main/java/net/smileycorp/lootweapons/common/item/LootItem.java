@@ -31,16 +31,14 @@ public interface LootItem {
     //feels like a pretty good distribution, mostly common and uncommon for luck < 2, starts distributing rares, legendaries and mythicals later
     //allows for a general distribution with values weighted to the current tier, while allowing commons to always generate, but weighting away from them
     //may have to tweak the distribution slightly so that generating above the upper bound is preferred instead of below
-    //from rough testing with a pretty big sample size of 10000 runs approximate rarities for each luck value
-    //starts at 0.9 for luck 0 aproximately 0.4 - 0.6 gain per luck level
     //may need to tweak the rarity values or the luck multiplier with testing
     default double getRarityValue(int luck) {
-        return rand.nextInt(luck + 3) - (rand.nextInt(luck + 1) * rand.nextGaussian());
+        return rand.nextInt(2 * luck + 1) - (rand.nextInt(luck + 3)) * rand.nextGaussian();
     }
     
     default Rarity getRarity(double value) {
-        if (value > 13) return Constants.MYTHICAL;
-        if (value > 10) return Constants.LEGENDARY;
+        if (value > 16) return Constants.MYTHICAL;
+        if (value > 11) return Constants.LEGENDARY;
         if (value > 7) return Rarity.EPIC;
         if (value > 4) return Rarity.RARE;
         if (value > 1) return Rarity.UNCOMMON;
