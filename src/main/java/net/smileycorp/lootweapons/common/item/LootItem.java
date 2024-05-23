@@ -33,7 +33,7 @@ public interface LootItem {
     //may have to tweak the distribution slightly so that generating above the upper bound is preferred instead of below
     //may need to tweak the rarity values or the luck multiplier with testing
     default double getRarityValue(int luck) {
-        return rand.nextInt(2 * luck + 1) - (rand.nextInt(luck + 3)) * rand.nextGaussian();
+        return Mth.clamp(rand.nextInt(2 * luck + 1) - (rand.nextInt(luck + 3)) * rand.nextGaussian(), 20, 0);
     }
     
     default Rarity getRarity(double value) {
@@ -62,6 +62,11 @@ public interface LootItem {
         float brightness = rand.nextInt(rand.nextInt(60) + 40) * 0.01f;
         return Color.HSBtoRGB(hue, saturation, brightness);
     }
+    default float calculateAttributeMultiplier(double rarityValue) {
+        return  1 + ((rand.nextInt((int) rarityValue + 1)) * rand.nextFloat()
+                - rand.nextInt((int)rarityValue + 1) * (float)rand.nextGaussian()) * rand.nextFloat();
+    }
+    
     
     //random distribution to calculate if a weapon should have an elemental attribute
     //weights rarity as well as initial luck, should usually favour luck unless the rolled weapon has a high rarity value
