@@ -11,7 +11,7 @@ import net.smileycorp.lootweapons.common.attributes.ElementalWeaponAttributes;
 
 public class LootData {
     
-    private static final LootData EMPTY = new LootData(null, new byte[0], new int[0], new float[0], null);
+    public static final LootData EMPTY = new LootData(null, new byte[0], new int[0], new float[0], null);
     private final Rarity rarity;
     private final byte[] parts;
     private final int[] colours;
@@ -77,6 +77,11 @@ public class LootData {
         }
         if (tag.contains("attribute")) builder.attribute(ElementalWeaponAttributes.get(new ResourceLocation(tag.getString("attribute"))));
         return builder.build();
+    }
+    
+    public boolean isEmpty() {
+        if (this == EMPTY) return true;
+        return parts.length == 0 && colours.length == 0 && stats.length == 0;
     }
     
     public static class Builder {

@@ -1,7 +1,11 @@
 package net.smileycorp.lootweapons.common;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -15,6 +19,8 @@ import net.smileycorp.lootweapons.common.item.LootSword;
 @Mod(value = Constants.MODID)
 @Mod.EventBusSubscriber(modid = Constants.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class LootWeapons {
+	
+	public static LootWeapons INSTANCE;
 	
 	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(Registries.ITEM, Constants.MODID);
 	
@@ -31,11 +37,13 @@ public class LootWeapons {
 
 	public LootWeapons() {
 		LootWeaponsLogger.clearLog();
+		INSTANCE = this;
 	}
 
 	@SubscribeEvent
 	public static void constructMod(FMLConstructModEvent event) {
 		ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+		FMLJavaModLoadingContext.get().getModEventBus().register(INSTANCE);
 	}
 
 	@SubscribeEvent
@@ -46,6 +54,11 @@ public class LootWeapons {
 	@SubscribeEvent
 	public static void loadClient(FMLClientSetupEvent event) {
 	
+	}
+	
+	@SubscribeEvent
+	public void addCreative(BuildCreativeModeTabContentsEvent event) {
+		if (event.getTabKey() == CreativeModeTabs.COMBAT) event.accept(new ItemStack(LOOT_SWORD.get()));
 	}
 
 }

@@ -1,9 +1,12 @@
 package net.smileycorp.lootweapons.common.item;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -12,21 +15,24 @@ import net.smileycorp.lootweapons.common.attributes.ElementalWeaponAttribute;
 import net.smileycorp.lootweapons.common.data.LootData;
 
 import java.awt.*;
+import java.util.Locale;
 
 public interface LootItem {
     
     RandomSource rand = RandomSource.createNewThreadLocalInstance();
     
-    default ItemStack generate(int base, LootContext context) {
-        return generate(getLuckFromContext(base, context));
+    default CompoundTag generateNBT(int base, LootContext context) {
+        return generateNBT(getLuckFromContext(base, context));
     }
     
-    default ItemStack generate(int luck) {
+    default CompoundTag generateNBT(int luck) {
         double rarity = getRarityValue(luck);
-        return generate(getRarity(rarity), luck, rarity);
+        CompoundTag tag = generateNBT(getRarity(rarity), luck, rarity);
+        tag.putDouble("RarityValue", rarity);
+        return tag;
     }
     
-    ItemStack generate(Rarity randomRarity, int luck, double rarityValue);
+    CompoundTag generateNBT(Rarity randomRarity, int luck, double rarityValue);
     
     //feels like a pretty good distribution, mostly common and uncommon for luck < 2, starts distributing rares, legendaries and mythicals later
     //allows for a general distribution with values weighted to the current tier, while allowing commons to always generate, but weighting away from them
@@ -48,6 +54,11 @@ public interface LootItem {
     //multiply luck and looting modifiers by the base to hopefully make a luck value in a good range
     default int getLuckFromContext(int base, LootContext context) {
         return (int) ((double)base * ((context.getLootingModifier() + 1) * 0.5f) * context.getLuck());
+    }
+    
+    //multiply luck modifier by the base to hopefully make a luck value in a good range
+    default int getLuckFromEntity(int base, LivingEntity entity) {
+        return (int) ((double)base * 0.5f * entity.getAttribute(Attributes.LUCK).getValue());
     }
     
     default int getRandomMaterialColour(double rarityValue) {
@@ -77,7 +88,8 @@ public interface LootItem {
     //generate a descriptor used in the item toolip following the format rarity element weapon-type
     //e.g. Common Sword, Legendary Blazing Axe, Epic Icy Spear, Common Poisonous Knife, Mythical Chestplate
     default MutableComponent getDescription(ItemStack stack, Component name) {
-        MutableComponent description = Component.translatable("text.lootweapons.rarity." + getRarity(stack).name()).append(" ");
+        MutableComponent description = Component.translatable("text.lootweapons.rarity." + getRarity(stack).name()
+                .toLowerCase(Locale.US)).append(" ");
         ElementalWeaponAttribute attribute = getElementalAttribute(stack);
         if (attribute != null) description.append(attribute.getName()).append(" ");
         return description.append(name);
@@ -92,7 +104,12 @@ public interface LootItem {
     }
     
     default LootData getLootData(ItemStack stack) {
-        return LootData.fromTag(stack.getTag());
+        CompoundTag tag = stack.getTag();
+        return tag != null && tag.contains("LootData") ? LootData.fromTag(tag.getCompound("LootData")) : LootData.EMPTY;
+    }
+    
+    default boolean hasLootData(ItemStack stack) {
+        return !getLootData(stack).isEmpty();
     }
     
 }

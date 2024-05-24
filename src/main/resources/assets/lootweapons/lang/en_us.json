@@ -1,10 +1,12 @@
 {
+	"item.lootweapons.loot_sword": "Random Sword",
+	
 	"text.lootweapons.rarity.common": "Common",
 	"text.lootweapons.rarity.uncommon": "Uncommon",
 	"text.lootweapons.rarity.rare": "Rare",
 	"text.lootweapons.rarity.epic": "Common",
 	"text.lootweapons.rarity.legendary": "Legendary",
-	"text.lootweapons.rarity.mythical": "Mythical",
+	"text.lootweapons.rarity.mythic": "Mythical",
 	
 	"text.lootweapons.item.sword": "Sword",
 	
@@ -128,12 +130,12 @@
 	"text.lootweapons.descriptor.legendary.3": "Galactic %1$s",
 	"text.lootweapons.descriptor.legendary.4": "Lunar %1$s",
 	
-	"text.lootweapons.descriptor.mythical.0": "Mythical %1$s",
-	"text.lootweapons.descriptor.mythical.1": "Mythic %1$s",
-	"text.lootweapons.descriptor.mythical.2": "Divine %1$s",
-	"text.lootweapons.descriptor.mythical.3": "God %1$s",
-	"text.lootweapons.descriptor.mythical.4": "Godly %1$s",
-	"text.lootweapons.descriptor.mythical.5": "Demon %1$s",
+	"text.lootweapons.descriptor.mythic.0": "Mythical %1$s",
+	"text.lootweapons.descriptor.mythic.1": "Mythic %1$s",
+	"text.lootweapons.descriptor.mythic.2": "Divine %1$s",
+	"text.lootweapons.descriptor.mythic.3": "God %1$s",
+	"text.lootweapons.descriptor.mythic.4": "Godly %1$s",
+	"text.lootweapons.descriptor.mythic.5": "Demon %1$s",
 	
 	"text.lootweapons.sword.normal.0": "Sword",
 	"text.lootweapons.sword.normal.1": "Blade",
