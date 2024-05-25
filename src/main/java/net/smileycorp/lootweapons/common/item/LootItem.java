@@ -11,6 +11,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.smileycorp.lootweapons.common.Constants;
+import net.smileycorp.lootweapons.common.LootWeapons;
+import net.smileycorp.lootweapons.common.LootWeaponsLogger;
 import net.smileycorp.lootweapons.common.attributes.ElementalWeaponAttribute;
 import net.smileycorp.lootweapons.common.data.LootData;
 
@@ -39,7 +41,9 @@ public interface LootItem {
     //may have to tweak the distribution slightly so that generating above the upper bound is preferred instead of below
     //may need to tweak the rarity values or the luck multiplier with testing
     default double getRarityValue(int luck) {
-        return Mth.clamp(rand.nextInt(2 * luck + 1) - (rand.nextInt(luck + 3)) * rand.nextGaussian(), 20, 0);
+        double rarity = Mth.clamp(rand.nextInt(2 * luck + 1) - (rand.nextInt(luck + 3)) * rand.nextGaussian(), 0, 20);;
+        LootWeaponsLogger.logInfo("Generated rarity " + rarity + " for luck value " + luck);
+        return rarity;
     }
     
     default Rarity getRarity(double value) {
@@ -66,7 +70,7 @@ public interface LootItem {
         float hue = rand.nextInt(360) * 0.00277777f;
         //higher rarity items should ideally look more saturated than lower ones to make them look more unique and less dull
         //clamp rarity to not overapply or underapply saturation
-        int r = (int) Mth.clamp(rarityValue, 25, 1);
+        int r = (int) Mth.clamp(rarityValue, 1, 25);
         //should proportionally weight to the higher bounds
         float saturation = (rand.nextInt(r) +  rand.nextInt(r) + rand.nextInt(r) + rand.nextInt(r)) * 0.01f;
         //random brightness, don't want it below 40 so the texture isn't too dark
@@ -74,15 +78,14 @@ public interface LootItem {
         return Color.HSBtoRGB(hue, saturation, brightness);
     }
     default float calculateAttributeMultiplier(double rarityValue) {
-        return  1 + ((rand.nextInt((int) rarityValue + 1)) * rand.nextFloat()
-                - rand.nextInt((int)rarityValue + 1) * (float)rand.nextGaussian()) * rand.nextFloat();
+        return  0.75f + ((rand.nextInt((int) rarityValue + 1))) * 0.1f * rand.nextFloat();
     }
     
     
     //random distribution to calculate if a weapon should have an elemental attribute
     //weights rarity as well as initial luck, should usually favour luck unless the rolled weapon has a high rarity value
     default boolean shouldHaveElementalAttribute(int luck, double rarityValue) {
-        return (rand.nextInt(luck + 3) * rand.nextInt((int) rarityValue)) * rand.nextGaussian() > 5;
+        return (rand.nextInt(luck + 3) * rand.nextInt((int) rarityValue + 1)) * rand.nextGaussian() > 5;
     }
     
     //generate a descriptor used in the item toolip following the format rarity element weapon-type

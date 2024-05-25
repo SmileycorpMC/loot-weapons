@@ -12,7 +12,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.smileycorp.lootweapons.common.attributes.ElementalWeaponAttributes;
 import net.smileycorp.lootweapons.common.data.LootData;
 
@@ -42,6 +41,7 @@ public class LootSword extends SwordItem implements LootItem {
     
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> lines, TooltipFlag flag) {
+        if (!hasLootData(stack)) return;
         lines.add(getDescription(stack, Component.translatable("text.lootweapons.item.sword")));
     }
     
@@ -59,7 +59,7 @@ public class LootSword extends SwordItem implements LootItem {
     
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        if (hasLootData(stack) || (!(entity instanceof LivingEntity)) |! selected) return;
+        if (hasLootData(stack) || !(entity instanceof LivingEntity) || level.isClientSide) return;
         CompoundTag tag = stack.getTag();
         int luck = tag != null && tag.contains("Luck") ? tag.getInt("Luck") : 0;
         if (tag == null) tag = new CompoundTag();

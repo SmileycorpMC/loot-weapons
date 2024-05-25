@@ -6,8 +6,12 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Rarity;
+import net.smileycorp.lootweapons.common.Constants;
 import net.smileycorp.lootweapons.common.attributes.ElementalWeaponAttribute;
 import net.smileycorp.lootweapons.common.attributes.ElementalWeaponAttributes;
+import net.smileycorp.lootweapons.common.item.LootItem;
+
+import java.util.Locale;
 
 public class LootData {
     
@@ -49,7 +53,7 @@ public class LootData {
     
     public CompoundTag toTag() {
         CompoundTag tag = new CompoundTag();
-        if (rarity != null) tag.putString("rarity", rarity.toString());
+        if (rarity != null) tag.putString("rarity", rarity.name().toLowerCase(Locale.US));
         if (parts.length > 0) tag.putByteArray("parts", parts);
         if (colours.length > 0) tag.putIntArray("colours", colours);
         if (stats.length > 0) {
@@ -66,7 +70,7 @@ public class LootData {
     
     public static LootData fromTag(CompoundTag tag) {
         if (tag == null) return LootData.EMPTY;
-        Builder builder = new Builder(tag.contains("rarity") ? Rarity.valueOf(tag.getString("rarity")) : Rarity.COMMON);
+        Builder builder = new Builder(tag.contains("rarity") ? Constants.getRarity(tag.getString("rarity")) : Rarity.COMMON);
         if (tag.contains("parts")) builder.parts(tag.getByteArray("parts"));
         if (tag.contains("colours")) builder.colours(tag.getIntArray("colours"));
         if (tag.contains("stats")) {
