@@ -9,7 +9,6 @@ import net.minecraft.world.item.Rarity;
 import net.smileycorp.lootweapons.common.Constants;
 import net.smileycorp.lootweapons.common.attributes.ElementalWeaponAttribute;
 import net.smileycorp.lootweapons.common.attributes.ElementalWeaponAttributes;
-import net.smileycorp.lootweapons.common.item.LootItem;
 
 import java.util.Locale;
 

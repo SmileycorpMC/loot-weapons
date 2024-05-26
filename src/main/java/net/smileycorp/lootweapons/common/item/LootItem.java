@@ -11,7 +11,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.smileycorp.lootweapons.common.Constants;
-import net.smileycorp.lootweapons.common.LootWeapons;
 import net.smileycorp.lootweapons.common.LootWeaponsLogger;
 import net.smileycorp.lootweapons.common.attributes.ElementalWeaponAttribute;
 import net.smileycorp.lootweapons.common.data.LootData;
